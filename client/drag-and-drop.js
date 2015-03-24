@@ -14,9 +14,6 @@ el.addEventListener("drop", function(evt) {
   evt.preventDefault();
   evt.stopPropagation();
 
-  // Save the X and Y position fo the mouse, to send it to the server
-  var x = evt.clientX, y = evt.clientY;
-
   // Get the first file only
   var file = evt.dataTransfer.files[0]; // FileList object.
   var reader = new FileReader();
@@ -34,8 +31,6 @@ el.addEventListener("drop", function(evt) {
     data.append('file', e.target.result);
     data.append('fileName', file.name);
     data.append('type', matches[1]);
-    data.append('x', x);
-    data.append('y', y);
 
     // Send an HTTP POST request using the jquery
     $.ajax({
