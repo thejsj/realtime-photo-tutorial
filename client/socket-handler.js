@@ -8,13 +8,11 @@
 // You must have an element with the ID `dropzone`
 var socket = io.connect('http://localhost:8000');
 
-socket.on('Image:update', function (photo) {
+socket.on('Image:update', function (image) {
   var reader = new FileReader();
   reader.onload = function(e) {
-    var base64 = e.target.result.match(/^data:([A-Za-z-+\/]*);base64,(.+)$/);
-    var src = 'data:' + photo.type  + ';base64,' + base64[2];
     $('#images')
-      .html('<img src="' + src + '" />');
+      .html('<img src="' + e.target.result + '" />');
   }.bind(this);
-  reader.readAsDataURL(new Blob([photo.file]));
+  reader.readAsDataURL(new Blob([image.file]));
 });
