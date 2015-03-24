@@ -7,28 +7,23 @@
 var _ = require('lodash');
 var r = require('./db');
 var multiparty = require('multiparty');
+var fs = require('fs');
 
 var imageCreate = function (req, res) {
 
   var form = new multiparty.Form();
   // This form is a `multipart/form-data` so we need to parse it
   // `form.parse` will get all our images and fields
-  form.parse(req, function (err, fields) {
-    var imageFile = fields.file[0]; // Our file in a base64 string
+  form.parse(req, function (err, fields, files) {
+    var imageFilePath = files.file[0].path; // Our file in a base64 string
     var image = {
       fileName: fields.fileName[0],
       type: fields.type[0],
-      x: fields.x[0],
-      y: fields.y[0]
-    }
-    // Get only the base64-encoded binary data. Remove mime type.
-    var matches = imageFile.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
-    if (Array.isArray(matches)) {
-      // Convert our base64 string into a buffer
-      var buffer = new Buffer(matches[2], 'base64');
+    };
+    fs.readFile(imageFilePath, function (err, file) {
       // Convert our buffer into a ReQL binary object
       // RethinkDB accepts buffers when saving something as a binary object in the database
-      image.file = r.binary(buffer);
+      image.file = r.binary(file);
       // Insert image into the database
       r
         .table('photos')
@@ -39,7 +34,7 @@ var imageCreate = function (req, res) {
             id: req.params.id
           });
         });
-    };
+    })
   });
 
 }

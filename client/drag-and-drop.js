@@ -18,35 +18,22 @@ el.addEventListener("drop", function(evt) {
   var file = evt.dataTransfer.files[0]; // FileList object.
   var reader = new FileReader();
 
-  reader.onload = function(e) {
+  var data = new FormData();
+  data.append('file', file);
+  data.append('fileName', file.name);
+  data.append('type', file.type);
 
-    // e.target.result resturns a string with the image encoded as base64
-    var base64 = e.target.result;
-
-    // We want to find the MIME Type for this image
-    var matches = base64.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
-
-   // Add the image and metadata to a FormData object
-    var data = new FormData();
-    data.append('file', e.target.result);
-    data.append('fileName', file.name);
-    data.append('type', matches[1]);
-
-    // Send an HTTP POST request using the jquery
-    $.ajax({
-      url: '/image',
-      data: data,
-      processData: false,
-      contentType: false,
-      type: 'POST',
-      success: function(data){
-        console.log('Image uploaded!');
-      }
-    });
-  }.bind(this);
-
-  // Read only the first file
-  reader.readAsDataURL(file);
+  // Send an HTTP POST request using the jquery
+  $.ajax({
+    url: '/image',
+    data: data,
+    processData: false,
+    contentType: false,
+    type: 'POST',
+    success: function(data){
+      console.log('Image uploaded!');
+    }
+  });
 }, false);
 
 el.addEventListener('dragover', function (evt) {
