@@ -5,14 +5,21 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <style>
       #dropzone {
-        width: 50%;
-        height: 100%;
-        float: left;
+        width: 200px;
+        height: 80px;
+        margin: auto;
+        margin-top: 10px;
+        border: solid 2px #eee;
+        text-align: center;
+        padding: 10px;
       }
       #images {
-        width: 50%;
-        height: 100%;
-        float: right;
+        width: 220px;
+        min-height: 100px;
+        border: solid 2px #eee;
+        margin: auto;
+        margin-top: 10px;
+        overflow: hidden;
       }
       #images img {
         width: 100%;
@@ -21,10 +28,10 @@
     </style>
   </head>
   <body>
+    <div id='images'></div>
     <div id='dropzone'>
       <p>Drop Images Here</p>
     </div>
-    <div id='images'></div>
     <script src='./drag-and-drop.js' type='text/javascript'></script>
     <script src='./socket-handler.js' type='text/javascript'></script>
   </body>

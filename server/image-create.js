@@ -26,7 +26,7 @@ var imageCreate = function (req, res) {
       image.file = r.binary(file);
       // Insert image into the database
       r
-        .table('photos')
+        .table('images')
         .insert(image)
         .run(r.conn)
         .then(function (query_result) {
@@ -37,6 +37,6 @@ var imageCreate = function (req, res) {
     })
   });
 
-}
+};
 
 module.exports = imageCreate;

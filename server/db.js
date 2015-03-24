@@ -4,54 +4,38 @@
 var q = require('q');
 var r = require('rethinkdb');
 
+var dbConnection = {
+  'host': 'localhost',
+  'port': 28015,
+  'db': 'realtime_photo_tutorial'
+};
+
 r.connections = [];
 r.getNewConnection = function () {
-  return r.connect({
-    'host': 'localhost',
-    'port': 28015,
-    'db': 'realtime_photo_sharing'
-  })
+  return r.connect(dbConnection)
     .then(function (conn) {
-      conn.use('realtime_photo_sharing');
+      conn.use(dbConnection.db);
       r.connections.push(conn);
       return conn;
     });
 };
 
-r.connect({
-  'host': 'localhost',
-  'port': 28015,
-  'db': 'realtime_photo_sharing'
-})
+r.connect(dbConnection)
   .then(function (conn) {
     r.conn = conn;
     r.connections.push(conn);
-    return r.dbCreate('realtime_photo_sharing').run(r.conn)
-      .then(function () {})
+    return r.dbCreate(dbConnection.db).run(r.conn)
       .catch(function () {})
       .then(function () {
-        r.conn.use('realtime_photo_sharing');
+        r.conn.use(dbConnection.db);
         // Create Tables
         return r.tableList().run(r.conn)
           .then(function (tableList) {
             return q()
               .then(function() {
-                if (tableList.indexOf('photos') === -1) {
-                  return r.tableCreate('photos').run(r.conn);
+                if (tableList.indexOf('images') === -1) {
+                  return r.tableCreate('images').run(r.conn);
                 }
-              })
-              .then(function () {
-                if (tableList.indexOf('users') === -1) {
-                  return r.tableCreate('users').run(r.conn);
-                }
-              })
-              .then(function () {
-                return r.table('users').indexList().run(r.conn)
-                  .then(function (indexList) {
-                    if (indexList.indexOf('login') === -1) {
-                      return r.table('users').indexCreate('login').run(r.conn);
-                    }
-                  });
               });
           });
       });

@@ -16,7 +16,6 @@ el.addEventListener("drop", function(evt) {
 
   // Get the first file only
   var file = evt.dataTransfer.files[0]; // FileList object.
-  var reader = new FileReader();
 
   var data = new FormData();
   data.append('file', file);
