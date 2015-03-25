@@ -1,0 +1,21 @@
+#dropzone {
+  width: 200px;
+  height: 80px;
+  margin: auto;
+  margin-top: 10px;
+  border: solid 2px #eee;
+  text-align: center;
+  padding: 10px;
+}
+#images {
+  width: 220px;
+  min-height: 100px;
+  border: solid 2px #eee;
+  margin: auto;
+  margin-top: 10px;
+  overflow: hidden;
+}
+#images img {
+  width: 100%;
+  height: auto;
+}
