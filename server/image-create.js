@@ -16,14 +16,14 @@ var imageCreate = function (req, res) {
   // `form.parse` will get all our images and fields
   form.parse(req, function (err, fields, files) {
     var imageFilePath = files.file[0].path; // Our file in a base64 string
-    var image = {
-      fileName: fields.fileName[0],
-      type: fields.type[0],
-    };
     fs.readFile(imageFilePath, function (err, file) {
       // Convert our buffer into a ReQL binary object
       // RethinkDB accepts buffers when saving something as a binary object in the database
-      image.file = r.binary(file);
+      var image = {
+        fileName: fields.fileName[0],
+        type: fields.type[0],
+        file: file,
+      };
       // Insert image into the database
       r
         .table('images')
@@ -34,7 +34,7 @@ var imageCreate = function (req, res) {
             id: req.params.id
           });
         });
-    })
+    });
   });
 
 };
